@@ -1,5 +1,63 @@
 # Python Sprint Zero
 
+## Development
+
+### Tested Configuration
+
+* `vagrant`: 2.4.3
+* `ansible`: 2.18.3
+* `colima`: 0.8.1
+* `docker`: 28.0.2
+
+## Instructions
+
+```
+./bin/init
+colima start --cpu 2 --memory 2 --vm-type=vz --mount-type=virtiofs --dns 8.8.8.8
+vagrant up
+vagrant provision
+vagrant ssh
+./bin/init
+```
+
+### Test
+
+#### Shell Script
+
+```
+shellcheck -x ./*.sh bin/*
+```
+
+#### Ansible
+
+```
+ansible-lint -p infrastructure/ansible/playbook-*.yml
+```
+
+#### Python
+
+```
+tox
+```
+
+##### Watch
+
+```
+tox -e watch
+```
+
+### Code Formatter
+
+```
+tox -e format
+```
+
+### Run
+
+```
+./bin/run-local -c
+```
+
 ## Architecture
 
 The architectural structure and design rules for this project uses a combination of Hexagonal Architecture and Domain-Driven Design (`DDD`) principles. The architecture is organized into clearly separated domain, application, infrastructure, and interface layers, following clean architecture principles. The domain layer encapsulates entities and business rules, the application layer manages orchestration through use cases, infrastructure contains data persistence implementations with repositories, and the interface layer provides `RESTful` `API` routes. The structure emphasizes high test coverage, maintainability, and security by design.
