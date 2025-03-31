@@ -74,15 +74,15 @@ The architectural structure and design rules for this project uses a combination
 project/
 
  application/                       # Use cases
-    use_cases/
+    use_case/
         import_data_use_case.py
         get_data_use_case.py
         check_health_use_case.py
-    services/
-        auth_service.py
+    service/
+        authentication_service.py
 
  domain/                            # Business logic
-    auth/
+    authentication/
         user_identity.py
     health/
         health_status.py
@@ -92,26 +92,26 @@ project/
        data_repository.py
     service/
        data_import_service.py
-    enums/
+    enum/
        user_role.py
 
  infrastructure/                    # Adapters, drivers
     observability/
         logger.py
-        metrics.py
+        metric.py
         tracing.py
     persistence/
        in_memory_repository.py
-    caching/
+    cache/
         cache_provider.py
-    messaging/
+    message/
         message_producer.py
         message_consumer.py
-    file_importer/
+    importer/
        csv_data_importer.py
        base_importer.py
     security/
-       auth_backend.py
+       authentication_backend.py
        token_provider.py
     audit/
        audit_logger.py
@@ -121,10 +121,10 @@ project/
  interface/                         # APIs and CLI
     api/
         main.py
-        controllers/
+        controller/
            health_controller.py
-        dtos/
-            health_status_dto.py
+        data_transfer_object/
+            health_status_data_transfer_object.py
     cli/
 
  shared/                            # Cross-cutting concerns
@@ -132,7 +132,7 @@ project/
      resilience/
          retry.py
          circuit_breaker.py
-     formatters/
+     formatter/
 ```
 
 ---
@@ -141,9 +141,9 @@ project/
 
 #### Domain
 
-- `models/` contain pure domain entities (e.g., `DataRecord`)
-- `repositories/` define interfaces for persistence (abstract base classes)
-- `services/` contain stateless domain logic (business rules)
+- `model/` contain pure domain entities (e.g., `DataRecord`)
+- `repository/` define interfaces for persistence (abstract base classes)
+- `service/` contain stateless domain logic (business rules)
 
 #### Application
 
@@ -152,21 +152,21 @@ project/
 
 #### Infrastructure
 
-- Implements interfaces from `domain.repositories`
-- `file_importer` handles imports
-- `security/` provides token-based auth
+- Implements interfaces from `domain.repository`
+- `importer` handles imports
+- `security/` provides token-based authentication
 - `system/` contains diagnostics (e.g., disk, database checks)
 - `observability/` provides logging, tracing decorators
 
 #### Interface
 
-- `api/controllers/` expose `FastAPI` routes and depend on use cases
-- `api/dtos/` define `Pydantic` models for request/response shaping
+- `api/controller/` expose `FastAPI` routes and depend on use cases
+- `api/data_transfer_object/` define `Pydantic` model for request/response shaping
 - `cli/` optionally runs scripts or command-line tools
 
 #### Shared
 
-- `formatters/` contains reusable utility classes for formatting (e.g., date/time conversion)
+- `formatter/` contains reusable utility classes for formatting (e.g., date/time conversion)
 - `configuration.py` loads settings
 
 ---
@@ -251,7 +251,7 @@ This project uses the dependency injection pattern to enhance modularity, testab
 - Tests must include only one assertion per test case
 - Test names should be phrased as a sentence clearly reflecting the behaviour being asserted.
   - **Example:** `test_should_return_404_when_resource_not_found()`
-- Consumer Driven Contract Testing (`CDCT`) consumer tests are required for any internal services called, and producer tests for `API` routes provided by the project.
+- Consumer Driven Contract Testing (`CDCT`) consumer tests are required for any internal service called, and producer tests for `API` routes provided by the project.
 - Architectural Unit Testing should be used to assert that the code aligns with the principles defined in this document.
 
 #### Static Analysis

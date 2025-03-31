@@ -70,7 +70,7 @@ Start Coding
 
     git checkout -b my-feature
 
-2. Implement changes. Structure your code within the appropriate layer (e.g., ``domain/models``, ``application/use_cases``).
+2. Implement changes. Structure your code within the appropriate layer (e.g., ``domain/model``, ``application/use_case``).
 
 3. Add docstrings and meaningful tests.
 

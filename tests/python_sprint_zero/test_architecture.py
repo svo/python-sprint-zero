@@ -44,26 +44,26 @@ def test_should_maintain_application_infrastructure_independence():
 
 
 @pytest.mark.skip(reason="nothing implemented")
-def test_should_use_application_use_cases_in_controllers():
+def test_should_use_application_use_case_in_controller():
     (
         archrule(
-            "Controllers Use Cases",
-            comment="Interface controllers should depend on application use cases",
+            "Controller Use Case",
+            comment="Interface controller should depend on application use cases",
         )
-        .match("python_sprint_zero.interface.api.controllers.*")
-        .should_import("python_sprint_zero.application.use_cases.*")
+        .match("python_sprint_zero.interface.api.controller.*")
+        .should_import("python_sprint_zero.application.use_case.*")
         .check("python_sprint_zero")
     )
 
 
 @pytest.mark.skip(reason="nothing implemented")
-def test_should_not_use_domain_models_in_dtos():
+def test_should_not_use_domain_model_in_data_transfer_object():
     (
         archrule(
-            "DTOs Models",
-            comment="DTOs should not depend directly on domain models",
+            "DTO Model",
+            comment="DTO should not depend directly on domain model",
         )
-        .match("python_sprint_zero.interface.api.dtos.*")
+        .match("python_sprint_zero.interface.api.data_transfer_object.*")
         .should_not_import("python_sprint_zero.domain.model.*")
         .check("python_sprint_zero")
     )

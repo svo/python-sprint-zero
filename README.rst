@@ -38,8 +38,8 @@ Design Principles
 
 - **Domain Layer**: Pure logic, independent of frameworks.
 - **Application Layer**: Use cases with no external dependencies.
-- **Infrastructure Layer**: Implements interfaces; adapters for I/O, caching, messaging, auth, observability.
-- **Interface Layer**: Routes delegate to use cases; DTOs shape requests/responses.
+- **Infrastructure Layer**: Implements interfaces; adapters for I/O, caching, messaging, authentication, observability.
+- **Interface Layer**: Routes delegate to use cases; DTO shape requests/responses.
 - **Shared Layer**: Centralized config, formatting, and resilience patterns.
 
 System Qualities
@@ -47,7 +47,7 @@ System Qualities
 
 - **Performance**: Caching and async messaging.
 - **Resilience**: Retry, circuit breakers, fallbacks.
-- **Security**: Token-based auth, auditing, secret management.
+- **Security**: Token-based authentication, auditing, secret management.
 - **Observability**: Structured logs, metrics, tracing.
 - **Testability**: 100% test coverage, contract and architectural testing.
 - **Portability**: Docker, IaC (Terraform, Ansible).
