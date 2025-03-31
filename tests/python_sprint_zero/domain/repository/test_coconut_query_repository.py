@@ -4,12 +4,12 @@ import pytest
 from assertpy import assert_that
 from unittest.mock import Mock
 
-from python_sprint_zero.domain.model.coconut import Person
+from python_sprint_zero.domain.model.coconut import Coconut
 
 
-class TestPersonQueryRepository:
+class TestCoconutQueryRepository:
     def test_should_return_coconut_when_exists(
-        self, mock_coconut_query_repository: Mock, sample_coconut_id: uuid.UUID, sample_coconut: Person
+        self, mock_coconut_query_repository: Mock, sample_coconut_id: uuid.UUID, sample_coconut: Coconut
     ):
         mock_coconut_query_repository.read.return_value = sample_coconut
 
@@ -19,7 +19,7 @@ class TestPersonQueryRepository:
         mock_coconut_query_repository.read.assert_called_once_with(sample_coconut_id)
 
     def test_should_return_coconut_with_correct_id(
-        self, mock_coconut_query_repository: Mock, sample_coconut_id: uuid.UUID, sample_coconut: Person
+        self, mock_coconut_query_repository: Mock, sample_coconut_id: uuid.UUID, sample_coconut: Coconut
     ):
         mock_coconut_query_repository.read.return_value = sample_coconut
 
@@ -31,12 +31,12 @@ class TestPersonQueryRepository:
     def test_should_throw_exception_when_coconut_does_not_exist(
         self, mock_coconut_query_repository: Mock, sample_coconut_id: uuid.UUID
     ):
-        mock_coconut_query_repository.read.side_effect = Exception("Person not found")
+        mock_coconut_query_repository.read.side_effect = Exception("Coconut not found")
 
         with pytest.raises(Exception) as excinfo:
             mock_coconut_query_repository.read(sample_coconut_id)
 
-        assert_that(str(excinfo.value)).is_equal_to("Person not found")
+        assert_that(str(excinfo.value)).is_equal_to("Coconut not found")
         mock_coconut_query_repository.read.assert_called_once_with(sample_coconut_id)
 
     def test_should_throw_exception_when_id_is_invalid(self, mock_coconut_query_repository: Mock):

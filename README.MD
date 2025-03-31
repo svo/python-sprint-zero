@@ -171,6 +171,27 @@ project/
 
 ---
 
+### Dependency Injection
+
+This project uses the dependency injection pattern to enhance modularity, testability, and maintainability, with [Lagom](https://github.com/meadsteve/lagom) as the dependency injection framework.
+
+#### Key Principles
+
+- **Inversion of Control**: Dependencies are provided to components rather than created internally.
+- **Interface-based Programming**: Components depend on abstractions (interfaces) rather than concrete implementations.
+- **Single Responsibility**: Each component focuses on its core functionality, with dependencies injected as needed.
+- **Testability**: Allows easy replacement of dependencies with test doubles (mocks, stubs) in unit tests.
+
+#### Using `Lagom` for Dependency Injection
+
+`Lagom` provides a lightweight, Pythonic approach to dependency injection with features that align well with our architecture:
+
+- **Type-based Resolution**: Dependencies are resolved based on type annotations.
+- **Singletons and Transients**: Support for both singleton (shared) and transient (new instance per request) dependencies.
+- **Contextual Containers**: Create specialized containers for different application contexts (e.g., testing vs. production).
+
+---
+
 ### Enhancing System Quality
 
 #### Performance and Scalability
@@ -264,3 +285,4 @@ By following these conventions, the code remains:
 - Secure by default
 - Readable by both humans and tools
 - Easy to `refactor` and scale with confidence
+- Loosely coupled through dependency injection
