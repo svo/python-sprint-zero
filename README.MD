@@ -1,5 +1,9 @@
 # Python Sprint Zero
 
+[![Build Builder](https://github.com/svo/python-sprint-zero/actions/workflows/builder.yml/badge.svg)](https://github.com/svo/python-sprint-zero/actions/workflows/builder.yml)
+[![Build Development](https://github.com/svo/python-sprint-zero/actions/workflows/development.yml/badge.svg)](https://github.com/svo/python-sprint-zero/actions/workflows/development.yml)
+[![Build Service](https://github.com/svo/python-sprint-zero/actions/workflows/service.yml/badge.svg)](https://github.com/svo/python-sprint-zero/actions/workflows/service.yml)
+
 ## Development
 
 ### Tested Configuration
