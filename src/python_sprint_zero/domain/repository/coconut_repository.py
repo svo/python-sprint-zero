@@ -2,7 +2,7 @@ import uuid
 
 from abc import ABC, abstractmethod
 
-from python_sprint_zero.domain.model.person import Person
+from python_sprint_zero.domain.model.coconut import Person
 
 
 class PersonQueryRepository(ABC):

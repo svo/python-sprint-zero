@@ -2,7 +2,7 @@ import uuid
 
 from assertpy import assert_that
 
-from python_sprint_zero.domain.model.person import Person
+from python_sprint_zero.domain.model.coconut import Person
 
 
 def test_should_have_id():
