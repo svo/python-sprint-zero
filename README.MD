@@ -266,7 +266,7 @@ Code must pass the following tools before merging:
 | `xenon`             | Maintainability and complexity limits              |
 | `mypy`              | Static type checking                               |
 | `semgrep`           | Static analysis for code patterns and security     |
-| `dependency-check`  | Dependency vulnerability scanning                  |
+| `pip-audit`         | Dependency vulnerability scanning                  |
 
 ##### Xenon Configuration
 
