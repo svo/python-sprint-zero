@@ -14,6 +14,11 @@ from python_sprint_zero.infrastructure.persistence.in_memory.in_memory_coconut_q
 from python_sprint_zero.interface.api.controller.coconut_controller import (
     create_coconut_controller,
 )
+from python_sprint_zero.infrastructure.security.basic_authentication import (
+    BasicAuthenticator,
+    SecurityDependency,
+    get_basic_authenticator,
+)
 
 app = FastAPI(title="Python Sprint Zero API", version="1.0.0")
 
@@ -30,6 +35,11 @@ def get_container() -> Container:
     container[GetCoconutUseCase] = GetCoconutUseCase
     container[CreateCoconutUseCase] = CreateCoconutUseCase
 
+    authenticator = get_basic_authenticator()
+    security_dependency = SecurityDependency(authenticator)
+    container[BasicAuthenticator] = lambda: authenticator
+    container[SecurityDependency] = lambda: security_dependency
+
     return container
 
 
@@ -40,7 +50,10 @@ def get_global_container() -> Container:
     return global_container
 
 
-coconut_controller = create_coconut_controller(global_container)
+security_dependency = global_container[SecurityDependency]
+authentication_dependency = security_dependency.authentication_dependency()
+
+coconut_controller = create_coconut_controller(global_container, authentication_dependency)
 app.include_router(coconut_controller.router)
 
 

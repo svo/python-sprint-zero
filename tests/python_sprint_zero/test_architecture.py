@@ -67,7 +67,6 @@ def test_should_not_use_domain_model_in_data_transfer_object():
     )
 
 
-@pytest.mark.skip(reason="nothing implemented")
 def test_should_follow_security_module_architecture():
     (
         archrule(
@@ -75,7 +74,7 @@ def test_should_follow_security_module_architecture():
             comment="Security components should follow architectural boundaries",
         )
         .match("python_sprint_zero.infrastructure.security.*")
-        .should_import("python_sprint_zero.domain.auth.*")
+        .should_import("python_sprint_zero.domain.authentication.*")
         .check("python_sprint_zero")
     )
 
