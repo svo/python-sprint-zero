@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from python_sprint_zero.domain.authentication.authenticator import Authenticator
+from python_sprint_zero.shared.configuration import get_application_setting_provider
 
 basic_authentication = HTTPBasic(auto_error=False)
 
@@ -53,7 +54,12 @@ class SecurityDependency:
 
 def get_basic_authenticator() -> BasicAuthenticator:
     authenticator = BasicAuthenticator()
-    authenticator.register_user("admin", "password")
+
+    setting_provider = get_application_setting_provider()
+    admin_username = setting_provider.get("admin")
+    admin_password = setting_provider.get("password")
+
+    authenticator.register_user(admin_username, admin_password)
 
     return authenticator
 

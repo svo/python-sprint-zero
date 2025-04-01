@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from assertpy import assert_that
@@ -16,11 +16,18 @@ from python_sprint_zero.infrastructure.security.basic_authentication import (
 
 
 class TestGetBasicAuthenticator:
-    def test_should_create_authenticator_with_default_user(self):
+    @patch("python_sprint_zero.infrastructure.security.basic_authentication.get_application_setting_provider")
+    def test_should_create_authenticator_with_configured_user(self, mock_get_provider):
+        mock_provider = Mock()
+        mock_provider.get.side_effect = lambda key: "admin" if key == "admin" else "password"
+        mock_get_provider.return_value = mock_provider
+
         authenticator = get_basic_authenticator()
 
         assert_that(authenticator).is_instance_of(BasicAuthenticator)
         assert_that(authenticator.verify_credentials("admin", "password")).is_true()
+        mock_provider.get.assert_any_call("admin")
+        mock_provider.get.assert_any_call("password")
 
 
 class TestBasicAuthenticator:

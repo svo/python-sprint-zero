@@ -1,5 +1,3 @@
-import pytest
-
 from pytest_archon.rule import archrule
 
 
@@ -95,7 +93,6 @@ def test_should_not_have_circular_dependencies():
     )
 
 
-@pytest.mark.skip(reason="nothing implemented")
 def test_should_maintain_shared_module_independence():
     (
         archrule(
