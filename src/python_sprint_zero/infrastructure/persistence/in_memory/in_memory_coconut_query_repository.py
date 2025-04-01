@@ -1,25 +1,27 @@
 import uuid
-from typing import Dict
 
 from python_sprint_zero.domain.model.coconut import Coconut
 from python_sprint_zero.domain.repository.coconut_repository import CoconutQueryRepository
+from python_sprint_zero.infrastructure.persistence.in_memory.shared_storage import SharedStorage
 
 
 class InMemoryCoconutQueryRepository(CoconutQueryRepository):
     def __init__(self) -> None:
-        self._storage: Dict[uuid.UUID, Coconut] = {}
+        self._storage = SharedStorage()
 
     def read(self, id: uuid.UUID) -> Coconut:
-        print(f"storage: {self._storage}")
         if not isinstance(id, uuid.UUID):
             raise ValueError("Invalid UUID")
 
-        if id not in self._storage:
+        coconut = self._storage.get_coconut(id)
+
+        if coconut is None:
             raise Exception("Coconut not found")
 
-        return self._storage[id]
+        return coconut
 
     def add_to_storage(self, coconut: Coconut) -> None:
         if coconut.id is None:
             raise ValueError("Coconut ID cannot be None")
-        self._storage[coconut.id] = coconut
+
+        self._storage.add_coconut(coconut)

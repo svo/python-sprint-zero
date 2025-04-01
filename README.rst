@@ -39,7 +39,7 @@ Design Principles
 - **Domain Layer**: Pure logic, independent of frameworks.
 - **Application Layer**: Use cases with no external dependencies.
 - **Infrastructure Layer**: Implements interfaces; adapters for I/O, caching, messaging, authentication, observability.
-- **Interface Layer**: Routes delegate to use cases; DTO shape requests/responses.
+- **Interface Layer**: Routes delegate to use cases; Data Transfer Object shape requests/responses.
 - **Shared Layer**: Centralized config, formatting, and resilience patterns.
 
 System Qualities

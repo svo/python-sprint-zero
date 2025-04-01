@@ -1,58 +1,101 @@
-import json
-import os
+import uuid
 
-from fastapi.openapi.utils import get_openapi
+import pytest
 from assertpy import assert_that
-from unittest.mock import patch
+from fastapi.testclient import TestClient
+from fastapi import FastAPI
+from lagom import Container
 
-from python_sprint_zero.interface.api.main import run
-
-OPENAPI_JSON_FILE_PATH = "build/openapi.json"
-OPENAPI_JSON_FILE_PATH_OPEN_FLAG = "w"
-
-
-def create_openapi_json(app):
-    os.makedirs(os.path.dirname(OPENAPI_JSON_FILE_PATH), exist_ok=True)
-
-    with open(OPENAPI_JSON_FILE_PATH, OPENAPI_JSON_FILE_PATH_OPEN_FLAG) as json_output_file:
-        json.dump(
-            get_openapi(
-                title=app.title,
-                version=app.version,
-                openapi_version=app.openapi_version,
-                description=app.description,
-                routes=app.routes,
-            ),
-            json_output_file,
-        )
+from python_sprint_zero.domain.repository.coconut_repository import CoconutCommandRepository, CoconutQueryRepository
+from python_sprint_zero.infrastructure.persistence.in_memory.in_memory_coconut_command_repository import (
+    InMemoryCoconutCommandRepository,
+)
+from python_sprint_zero.infrastructure.persistence.in_memory.in_memory_coconut_query_repository import (
+    InMemoryCoconutQueryRepository,
+)
+from python_sprint_zero.infrastructure.persistence.in_memory.shared_storage import SharedStorage
+from python_sprint_zero.interface.api.controller.coconut_controller import (
+    create_coconut_controller,
+)
 
 
-def test_should_create_openapi_json_file():
-    if os.path.exists(OPENAPI_JSON_FILE_PATH):
-        os.remove(OPENAPI_JSON_FILE_PATH)
+@pytest.fixture(scope="module")
+def test_container() -> Container:
+    container = Container()
 
-    from python_sprint_zero.interface.api.main import app as rest
+    query_repo = InMemoryCoconutQueryRepository()
+    container[CoconutQueryRepository] = lambda: query_repo
+    container[CoconutCommandRepository] = InMemoryCoconutCommandRepository
 
-    create_openapi_json(rest)
-
-    assert_that(OPENAPI_JSON_FILE_PATH).exists()
-
-
-@patch("python_sprint_zero.interface.api.main.main")
-@patch("sys.argv", ["test_script.py", "some_arg"])
-def test_should_run_main_function_with_command_line_args(mock_main):
-    run()
-
-    mock_main.assert_called_once_with(["some_arg"])
+    return container
 
 
-@patch("uvicorn.run")
-def test_should_start_uvicorn_server_with_correct_parameters(mock_uvicorn_run):
-    from python_sprint_zero.interface.api.main import main
+@pytest.fixture(scope="module")
+def test_app(test_container) -> FastAPI:
+    app = FastAPI()
 
-    main([])
+    coconut_controller = create_coconut_controller(test_container)
+    app.include_router(coconut_controller.router)
 
-    mock_uvicorn_run.assert_called_once_with(
-        "python_sprint_zero.interface.api.main:app",
-        reload=True,
-    )
+    return app
+
+
+@pytest.fixture
+def client(test_app) -> TestClient:
+    SharedStorage().clear()
+    return TestClient(test_app)
+
+
+class TestCoconutApi:
+    def test_should_create_coconut(self, client):
+        coconut_id = uuid.uuid4()
+
+        response = client.post("/coconut/", json={"id": str(coconut_id)})
+
+        assert_that(response.status_code).is_equal_to(201)
+        assert_that(response.headers["Location"]).is_equal_to(f"/coconut/{coconut_id}")
+
+    def test_should_retrieve_coconut(self, client):
+        coconut_id = uuid.uuid4()
+
+        client.post("/coconut/", json={"id": str(coconut_id)})
+        get_response = client.get(f"/coconut/{coconut_id}")
+
+        assert_that(get_response.status_code).is_equal_to(200)
+
+    def test_should_retrieve_coconut_detail(self, client):
+        coconut_id = uuid.uuid4()
+
+        client.post("/coconut/", json={"id": str(coconut_id)})
+        get_response = client.get(f"/coconut/{coconut_id}")
+
+        assert_that(get_response.json()["id"]).is_equal_to(str(coconut_id))
+
+    def test_should_be_404(self, client):
+        nonexistent_id = uuid.uuid4()
+        response = client.get(f"/coconut/{nonexistent_id}")
+
+        assert_that(response.status_code).is_equal_to(404)
+        assert_that(response.json()["detail"]).contains("not found")
+
+    def test_should_be_404_detail(self, client):
+        nonexistent_id = uuid.uuid4()
+        response = client.get(f"/coconut/{nonexistent_id}")
+
+        assert_that(response.json()["detail"]).contains("not found")
+
+    def test_should_be_409(self, client):
+        coconut_id = uuid.uuid4()
+
+        client.post("/coconut/", json={"id": str(coconut_id)})
+        second_response = client.post("/coconut/", json={"id": str(coconut_id)})
+
+        assert_that(second_response.status_code).is_equal_to(409)
+
+    def test_should_be_409_detail(self, client):
+        coconut_id = uuid.uuid4()
+
+        client.post("/coconut/", json={"id": str(coconut_id)})
+        second_response = client.post("/coconut/", json={"id": str(coconut_id)})
+
+        assert_that(second_response.json()["detail"]).contains("already exists")

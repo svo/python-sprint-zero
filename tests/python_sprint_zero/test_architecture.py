@@ -43,7 +43,6 @@ def test_should_maintain_application_infrastructure_independence():
     )
 
 
-@pytest.mark.skip(reason="nothing implemented")
 def test_should_use_application_use_case_in_controller():
     (
         archrule(
@@ -56,12 +55,11 @@ def test_should_use_application_use_case_in_controller():
     )
 
 
-@pytest.mark.skip(reason="nothing implemented")
 def test_should_not_use_domain_model_in_data_transfer_object():
     (
         archrule(
-            "DTO Model",
-            comment="DTO should not depend directly on domain model",
+            "Data Transfer Object Model",
+            comment="Data Transfer Object should not depend directly on domain model",
         )
         .match("python_sprint_zero.interface.api.data_transfer_object.*")
         .should_not_import("python_sprint_zero.domain.model.*")
