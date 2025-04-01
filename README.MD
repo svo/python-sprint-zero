@@ -265,7 +265,6 @@ Code must pass the following tools before merging:
 | `bandit`            | Security scanning for common issues                |
 | `xenon`             | Maintainability and complexity limits              |
 | `mypy`              | Static type checking                               |
-| `safety`            | Dependency vulnerability scanning                  |
 | `semgrep`           | Static analysis for code patterns and security     |
 | `dependency-check`  | Dependency vulnerability scanning                  |
 
