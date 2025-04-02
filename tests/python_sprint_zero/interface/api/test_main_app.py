@@ -4,7 +4,7 @@ import json
 
 from assertpy import assert_that
 from fastapi.openapi.utils import get_openapi
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 from python_sprint_zero.interface.api.main import app, get_container, global_container, get_global_container, main, run
 
@@ -74,13 +74,21 @@ class TestMainApp:
         assert_that(container).is_same_as(global_container)
 
     @patch("uvicorn.run")
-    def test_main_function(self, mock_run):
+    @patch("python_sprint_zero.interface.api.main.get_application_setting_provider")
+    def test_main_function(self, mock_get_provider, mock_run):
+        from python_sprint_zero.shared.configuration import ApplicationSettingProvider
+
+        mock_provider = Mock(spec=ApplicationSettingProvider)
+        mock_provider.get.side_effect = lambda key: True if key == "reload" else "0.0.0.0" if key == "host" else None
+        mock_get_provider.return_value = mock_provider
+
         test_args = []
         main(test_args)
 
         mock_run.assert_called_once_with(
             "python_sprint_zero.interface.api.main:app",
             reload=True,
+            host="0.0.0.0",
         )
 
     @patch("python_sprint_zero.interface.api.main.main")

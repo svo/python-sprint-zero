@@ -19,6 +19,7 @@ from python_sprint_zero.infrastructure.security.basic_authentication import (
     SecurityDependency,
     get_basic_authenticator,
 )
+from python_sprint_zero.shared.configuration import get_application_setting_provider
 
 app = FastAPI(title="Python Sprint Zero API", version="1.0.0")
 
@@ -58,9 +59,14 @@ app.include_router(coconut_controller.router)
 
 
 def main(args: list) -> None:
+    settings_provider = get_application_setting_provider()
+    reload_setting = settings_provider.get("reload")
+    host_setting = settings_provider.get("host")
+
     uvicorn.run(
         "python_sprint_zero.interface.api.main:app",
-        reload=True,
+        reload=reload_setting,
+        host=host_setting,
     )
 
 

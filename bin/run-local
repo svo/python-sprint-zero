@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export API_RELOAD='true'
+export APP_RELOAD='true'
 
 usage() {
   echo "Usage: $0 [OPTIONS]"

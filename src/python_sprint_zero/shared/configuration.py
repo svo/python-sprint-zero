@@ -22,6 +22,8 @@ def load_properties_file(file_path: str) -> Dict[str, str]:
 class ApplicationSettings(BaseSettings):
     admin: str = "admin"
     password: str = "password"
+    reload: bool = False
+    host: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -69,7 +71,11 @@ class ApplicationSettingProvider:
 
     def _get_from_settings(self, key: str) -> Any:
         if hasattr(self.settings, key):
-            return getattr(self.settings, key)
+            value = getattr(self.settings, key)
+
+            if key == "host" and not value:
+                raise ValueError("Host setting not found in properties file or environment")
+            return value
 
         raise ValueError(f"Setting {key} not found")
 
