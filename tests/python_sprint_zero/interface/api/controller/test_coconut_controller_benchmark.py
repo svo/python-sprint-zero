@@ -2,6 +2,7 @@ import uuid
 from typing import List
 
 import pytest
+from assertpy import assert_that
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from lagom import Container
@@ -91,8 +92,8 @@ def test_should_benchmark_get_existing_coconut(
         return benchmark_client.get(f"/coconut/{coconut_id}", headers=benchmark_authentication_header)
 
     response = benchmark(get_coconut)
-    assert response.status_code == 200
-    assert response.json()["id"] == str(coconut_id)
+    assert_that(response.status_code).is_equal_to(200)
+    assert_that(response.json()["id"]).is_equal_to(str(coconut_id))
 
 
 @pytest.mark.benchmark
@@ -103,7 +104,7 @@ def test_should_benchmark_get_nonexistent_coconut(benchmark, benchmark_client, b
         return benchmark_client.get(f"/coconut/{nonexistent_id}", headers=benchmark_authentication_header)
 
     response = benchmark(get_nonexistent_coconut)
-    assert response.status_code == 404
+    assert_that(response.status_code).is_equal_to(404)
 
 
 @pytest.mark.benchmark
@@ -113,8 +114,8 @@ def test_should_benchmark_create_new_coconut(benchmark, benchmark_client, benchm
         return benchmark_client.post("/coconut/", json={"id": str(coconut_id)}, headers=benchmark_authentication_header)
 
     response = benchmark(create_coconut)
-    assert response.status_code == 201
-    assert "Location" in response.headers
+    assert_that(response.status_code).is_equal_to(201)
+    assert_that(response.headers).contains_key("Location")
 
 
 @pytest.mark.benchmark
@@ -128,7 +129,7 @@ def test_should_benchmark_create_duplicate_coconut(
         return benchmark_client.post("/coconut/", json=request_data, headers=benchmark_authentication_header)
 
     response = benchmark(create_duplicate_coconut)
-    assert response.status_code == 409
+    assert_that(response.status_code).is_equal_to(409)
 
 
 @pytest.mark.benchmark
@@ -139,7 +140,7 @@ def test_should_benchmark_authentication_failure(benchmark, benchmark_client):
         return benchmark_client.get(f"/coconut/{coconut_id}")
 
     response = benchmark(request_without_auth)
-    assert response.status_code == 401
+    assert_that(response.status_code).is_equal_to(401)
 
 
 @pytest.mark.benchmark
@@ -148,14 +149,14 @@ def test_should_benchmark_create_and_retrieve_coconut(benchmark, benchmark_clien
         coconut_id = uuid.uuid4()
         request_data = {"id": str(coconut_id)}
         create_response = benchmark_client.post("/coconut/", json=request_data, headers=benchmark_authentication_header)
-        assert create_response.status_code == 201
+        assert_that(create_response.status_code).is_equal_to(201)
 
         get_response = benchmark_client.get(f"/coconut/{coconut_id}", headers=benchmark_authentication_header)
-        assert get_response.status_code == 200
+        assert_that(get_response.status_code).is_equal_to(200)
         return get_response
 
     response = benchmark(create_and_retrieve)
-    assert "id" in response.json()
+    assert_that(response.json()).contains_key("id")
 
 
 @pytest.mark.benchmark
@@ -166,7 +167,7 @@ def test_should_benchmark_sequential_create(benchmark, benchmark_client, benchma
             response = benchmark_client.post(
                 "/coconut/", json={"id": str(coconut_id)}, headers=benchmark_authentication_header
             )
-            assert response.status_code == 201
+            assert_that(response.status_code).is_equal_to(201)
 
     benchmark(create_multiple_coconut)
 
@@ -178,7 +179,7 @@ def test_should_benchmark_sequential_get(
     def get_multiple_coconut():
         for coconut_id in created_coconut_id[:5]:
             response = benchmark_client.get(f"/coconut/{coconut_id}", headers=benchmark_authentication_header)
-            assert response.status_code == 200
+            assert_that(response.status_code).is_equal_to(200)
 
     benchmark(get_multiple_coconut)
 
@@ -191,9 +192,9 @@ def test_should_benchmark_alternating_create_and_get(benchmark, benchmark_client
             create_response = benchmark_client.post(
                 "/coconut/", json={"id": str(coconut_id)}, headers=benchmark_authentication_header
             )
-            assert create_response.status_code == 201
+            assert_that(create_response.status_code).is_equal_to(201)
 
             get_response = benchmark_client.get(f"/coconut/{coconut_id}", headers=benchmark_authentication_header)
-            assert get_response.status_code == 200
+            assert_that(get_response.status_code).is_equal_to(200)
 
     benchmark(alternate_operation)
