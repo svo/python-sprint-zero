@@ -75,46 +75,40 @@ project/
 
  application/                       # Use cases
     use_case/
-        import_data_use_case.py
-        get_data_use_case.py
-        check_health_use_case.py
+        coconut_use_case.py
     service/
-        authentication_service.py
+        example_service.py
 
  domain/                            # Business logic
     authentication/
-        user_identity.py
+        authentitator.py
     health/
         health_status.py
     model/
-       data_record.py
+        coconut.py
     repository/
-       data_repository.py
+        coconut_repository.py
     service/
-       data_import_service.py
-    enum/
-       user_role.py
+        example_data_import_service.py
 
  infrastructure/                    # Adapters, drivers
     observability/
         logger.py
-        metric.py
+        metrics.py
         tracing.py
     persistence/
-       in_memory_repository.py
+        in_memory_coconut_command_repository.py
+        in_memory_coconut_query_repository.py
     cache/
         cache_provider.py
     message/
         message_producer.py
         message_consumer.py
     importer/
-       csv_data_importer.py
-       base_importer.py
+        example_importer.py
+        base_importer.py
     security/
-       authentication_backend.py
-       token_provider.py
-    audit/
-       audit_logger.py
+        basic_authentication.py
     system/
         health_checker.py
 
@@ -122,17 +116,19 @@ project/
     api/
         main.py
         controller/
-           health_controller.py
+            coconut_controller.py
+            health_controller.py
         data_transfer_object/
+            coconut_data_transfer_object.py
             health_status_data_transfer_object.py
-    cli/
 
  shared/                            # Cross-cutting concerns
-     configuration.py
-     resilience/
-         retry.py
-         circuit_breaker.py
-     formatter/
+    configuration.py
+    resilience/
+        retry.py
+        circuit_breaker.py
+    formatter/
+        example_formatter.py
 ```
 
 ---
@@ -153,7 +149,7 @@ project/
 #### Infrastructure
 
 - Implements interfaces from `domain.repository`
-- `importer` handles imports
+- `importer/` handles imports
 - `security/` provides token-based authentication
 - `system/` contains diagnostics (e.g., disk, database checks)
 - `observability/` provides logging, tracing decorators
@@ -248,10 +244,10 @@ This project uses the dependency injection pattern to enhance modularity, testab
 - 100% test coverage is expected
 - Tests should be meaningful and not just aim to increase coverage
 - Mocks/stubs should be used where necessary to isolate behaviour
-- Tests must include only one assertion per test case
-- Test names should be phrased as a sentence clearly reflecting the behaviour being asserted.
-  - **Example:** `test_should_return_404_when_resource_not_found()`
-- Consumer Driven Contract Testing (`CDCT`) consumer tests are required for any internal service called, and producer tests for `API` routes provided by the project.
+- Tests should include only one assertion per test case
+- Test names should be phrased as a sentence clearly reflecting the behaviour being asserted
+  - **Example:** `test_should_return_404_when_resource_is_not_found()`
+- Consumer Driven Contract Testing (`CDCT`) consumer tests are required for any internal service called, and producer tests for `API` routes provided by this project.
 - Architectural Unit Testing should be used to assert that the code aligns with the principles defined in this document.
 
 #### Static Analysis
@@ -267,14 +263,6 @@ Code must pass the following tools before merging:
 | `mypy`              | Static type checking                               |
 | `semgrep`           | Static analysis for code patterns and security     |
 | `pip-audit`         | Dependency vulnerability scanning                  |
-
-##### Xenon Configuration
-
-```
-xenon --max-absolute A --max-modules A --max-average A
-```
-
-This enforces an "A" grade for complexity across all modules.
 
 ---
 
