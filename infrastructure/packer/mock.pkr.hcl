@@ -35,7 +35,7 @@ build {
   provisioner "shell" {
     inline = [
       "mkdir /app",
-      "npm i -g @stoplight/prism-cli",
+      "npm i -g @stoplight/prism-cli@5.12.0",
       "apk add curl"
     ]
   }
