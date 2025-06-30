@@ -16,12 +16,10 @@
 ## Instructions
 
 ```
-./bin/init
 colima start --cpu 2 --memory 2 --vm-type=vz --mount-type=virtiofs --dns 8.8.8.8
 vagrant up
 vagrant provision
 vagrant ssh
-./bin/init
 ```
 
 ### Test
