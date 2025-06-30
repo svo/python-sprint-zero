@@ -7,6 +7,7 @@ if __name__ == "__main__":
             entry_points={
                 "console_scripts": [
                     "python-sprint-zero=python_sprint_zero.interface.api.main:run",
+                    "python-sprint-zero-cli=python_sprint_zero.interface.cli.main:run",
                 ]
             },
         )
