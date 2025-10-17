@@ -105,3 +105,31 @@ def test_should_maintain_shared_module_independence():
         )
         .check("python_sprint_zero")
     )
+
+
+def test_should_have_no_fastapi_imports_in_domain():
+    (
+        archrule(
+            "Domain FastAPI Independence",
+            comment="Domain layer should not import FastAPI",
+        )
+        .match("python_sprint_zero.domain.*")
+        .should_not_import("fastapi.*", "pydantic.*")
+        .check("python_sprint_zero")
+    )
+
+
+def test_should_maintain_order_domain_purity():
+    (
+        archrule(
+            "Order Domain Purity",
+            comment="Order domain models should have no infrastructure dependencies",
+        )
+        .match("python_sprint_zero.domain.model.order", "python_sprint_zero.domain.model.value_objects")
+        .should_not_import(
+            "python_sprint_zero.infrastructure.*",
+            "python_sprint_zero.interface.*",
+            "python_sprint_zero.application.*",
+        )
+        .check("python_sprint_zero")
+    )
