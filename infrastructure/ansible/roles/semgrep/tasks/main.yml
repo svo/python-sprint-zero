@@ -1,0 +1,8 @@
+- name: Install semgrep for static analysis
+  ansible.builtin.command:
+    cmd: pipx install semgrep
+    creates: ~/.local/bin/semgrep
+  register: semgrep_install
+  retries: 3
+  delay: 5
+  until: semgrep_install is success

@@ -6,6 +6,7 @@
     - git
     - python
     - pipx
+    - semgrep
     - ansible
     - docker
     - packer

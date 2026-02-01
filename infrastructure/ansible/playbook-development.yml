@@ -57,6 +57,7 @@
     - python
     - node
     - pipx
+    - semgrep
     - ansible
     - docker
     - packer
