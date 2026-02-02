@@ -13,22 +13,23 @@ These rules are **MANDATORY** and violations will break the project:
 - Each test function MUST contain exactly ONE assertion
 - Do NOT use pytest subtests or multiple assertions
 - Split tests with multiple assertions into separate test functions
+- **MUST use assertpy** (`assert_that`) - never bare Python `assert` statements
 - **Example:**
   ```python
   # WRONG - Multiple assertions
   def test_user_creation(self):
       user = create_user()
-      assert user.name == "John"
-      assert user.email == "john@example.com"
+      assert_that(user.name).is_equal_to("John")
+      assert_that(user.email).is_equal_to("john@example.com")
 
   # CORRECT - One assertion per test
   def test_should_set_user_name_when_user_is_created(self):
       user = create_user()
-      assert user.name == "John"
+      assert_that(user.name).is_equal_to("John")
 
   def test_should_set_user_email_when_user_is_created(self):
       user = create_user()
-      assert user.email == "john@example.com"
+      assert_that(user.email).is_equal_to("john@example.com")
   ```
 
 ### 3. LAYER BOUNDARY VIOLATIONS FORBIDDEN
@@ -171,6 +172,7 @@ project/
 
 **Rules:**
 - Controllers expose FastAPI routes
+- **MUST use Pydantic DTOs for ALL endpoint responses** - never return plain dictionaries
 - Use Pydantic models for DTOs (request/response shaping)
 - Depend on use cases from application layer
 - Handle HTTP-specific concerns (status codes, headers, etc.)
@@ -235,7 +237,11 @@ test_should_[expected_behavior]_when_[condition]
 
 ### Test Structure
 
+All tests MUST use `assertpy` library (`assert_that`) - never bare `assert` statements.
+
 ```python
+from assertpy import assert_that
+
 def test_should_return_coconut_when_id_exists(self):
     # Arrange
     repository = InMemoryCoconutRepository()
@@ -246,7 +252,7 @@ def test_should_return_coconut_when_id_exists(self):
     result = use_case.get_coconut(coconut_id)
 
     # Assert
-    assert result.id == coconut_id
+    assert_that(result.id).is_equal_to(coconut_id)
 ```
 
 ### Consumer Driven Contract Testing (CDCT)
@@ -289,6 +295,7 @@ def test_should_define_repository_interfaces_in_domain(self):
 - Prefer dependency injection for testability
 - Mock external services, databases, and I/O
 - Keep tests fast and independent
+- **ALWAYS use `assert_that` from assertpy** - bare `assert` statements are forbidden
 
 ## Dependency Injection with Lagom
 
@@ -492,14 +499,16 @@ tox -e format
 
 1. **Importing infrastructure in domain** - Domain must be pure
 2. **Multiple assertions in one test** - Split into separate tests
-3. **Adding comments** - Make code self-documenting instead
-4. **Direct instantiation** - Use dependency injection
-5. **Missing `__init__.py`** - Add to all packages
-6. **Wrong test names** - Follow sentence pattern
-7. **Skipping CDCT tests** - Required for service interactions
-8. **Missing observability** - Add logging with correlation-id
-9. **Forgetting to run `tox`** - Always verify before completion
-10. **Creating new files unnecessarily** - Prefer editing existing
+3. **Using bare assert statements** - ALWAYS use `assert_that` from assertpy
+4. **Returning plain dicts from endpoints** - MUST use Pydantic DTOs
+5. **Adding comments** - Make code self-documenting instead
+6. **Direct instantiation** - Use dependency injection
+7. **Missing `__init__.py`** - Add to all packages
+8. **Wrong test names** - Follow sentence pattern
+9. **Skipping CDCT tests** - Required for service interactions
+10. **Missing observability** - Add logging with correlation-id
+11. **Forgetting to run `tox`** - Always verify before completion
+12. **Creating new files unnecessarily** - Prefer editing existing
 
 ## Success Criteria
 
