@@ -58,6 +58,7 @@ This directory contains custom Claude Code skills tailored to this project's str
 - Includes common refactoring patterns
 
 **Supporting files:**
+- `references/refactoring-examples-from-codebase.md` - Examples from the codebase
 - `scripts/find_comments.py` - Executable script to scan for comments in codebase
 
 **Usage:**
@@ -70,27 +71,78 @@ python .claude/skills/self-documenting-refactor/scripts/find_comments.py src/
 
 ---
 
-### 4. Observability Pattern Injector
-**Directory:** `observability-injector/`
-**Trigger phrases:** "add logging", "add observability", "add metrics", "add tracing", "implement correlation-id"
+### 4. Property-Based Testing
+**Directory:** `property-based-testing/`
+**Trigger phrases:** "property-based testing", "roundtrip test", "serialization test", "test encode/decode", "hypothesis test"
 
-**Purpose:** Provides complete observability patterns including structured logging with correlation IDs, metrics collection, and distributed tracing. Creates the infrastructure that's documented but not yet implemented.
+**Purpose:** Provides guidance for property-based testing across multiple languages. Helps identify patterns where PBT provides stronger coverage than example-based tests.
 
 **Key features:**
-- Complete logger infrastructure with JSON structured logging
-- Correlation ID propagation across requests
-- Metrics collection (counters, gauges, histograms)
-- Distributed tracing with decorators
-- FastAPI middleware for correlation IDs
-- Usage patterns for each layer
-- Testing patterns for observability
+- Automatic detection of testable patterns (serialization, validation, normalization)
+- Property catalog with formulas (roundtrip, idempotence, invariant, commutativity, etc.)
+- Decision tree for task-based guidance
+- Language-specific library recommendations
+- Smart contract testing support (Echidna, Foundry)
 
 **Supporting files:**
-- `templates/logger_template.py` - Complete logger implementation
-- `templates/metrics_template.py` - Complete metrics collector implementation
-- `templates/tracing_template.py` - Complete tracing decorator implementation
+- `references/design.md` - Property-Driven Development approach
+- `references/generating.md` - Test generation patterns
+- `references/libraries.md` - PBT libraries by language
+- `references/refactoring.md` - Refactoring for testability
+- `references/reviewing.md` - Quality checklist
+- `references/strategies.md` - Input generation strategies
 
-**Note:** This infrastructure doesn't exist yet in the project but is claimed as a key feature. This skill provides complete reference implementations.
+---
+
+### 5. Test-Driven Development
+**Directory:** `test-driven-development/`
+**Trigger phrases:** "implement feature", "fix bug", "write code", "TDD", "red-green-refactor"
+
+**Purpose:** Enforces the TDD methodology with strict Red-Green-Refactor cycle. Ensures no production code is written without a failing test first.
+
+**Key features:**
+- Iron Law: No production code without failing test first
+- Red-Green-Refactor cycle enforcement
+- Common rationalizations and rebuttals
+- Verification checklist for each phase
+- Debugging integration guidance
+
+**Supporting files:**
+- `testing-anti-patterns.md` - Common testing pitfalls to avoid
+
+---
+
+### 6. Systematic Debugging
+**Directory:** `systematic-debugging/`
+**Trigger phrases:** "debug", "fix bug", "test failure", "unexpected behavior", "error", "not working"
+
+**Purpose:** Provides systematic debugging methodology. Ensures root cause investigation before attempting fixes.
+
+**Key features:**
+- Four-phase process (Root Cause → Pattern Analysis → Hypothesis → Implementation)
+- Multi-component system diagnostics
+- Evidence gathering before fixes
+- Architecture questioning after 3+ failed fixes
+- Red flag detection for premature fix attempts
+
+**Supporting files:**
+- `root-cause-tracing.md` - Backward tracing through call stack
+- `defense-in-depth.md` - Multi-layer validation patterns
+- `condition-based-waiting.md` - Replace timeouts with condition polling
+
+---
+
+### 7. Verification Before Completion
+**Directory:** `verification-before-completion/`
+**Trigger phrases:** "done", "complete", "fixed", "passing", "commit", "create PR", "finished"
+
+**Purpose:** Requires running verification commands and confirming output before making any success claims. Evidence before assertions, always.
+
+**Key features:**
+- Gate function: Identify → Run → Read → Verify → Claim
+- Common failure patterns and what each claim requires
+- Rationalization prevention table
+- Red flag detection for premature claims
 
 ---
 
@@ -101,13 +153,18 @@ Claude Code automatically loads and applies skills when trigger phrases are dete
 - User: "Create a new user feature" → Loads Hexagonal Architecture Scaffolder
 - User: "Generate tests for the UserService" → Loads Test Generator
 - User: "This code has comments, make it clearer" → Loads Self-Documenting Refactorer
+- User: "I need to debug this test failure" → Loads Systematic Debugging
+- User: "Implement the login feature" → Loads Test-Driven Development
 
 ### Manual Invocation
 You can also explicitly invoke skills:
 - `/hexagonal-architecture-scaffolder` - Load architecture scaffolding guidance
 - `/test-generator` - Load test generation guidance
 - `/self-documenting-refactor` - Load code refactoring guidance
-- `/observability-injector` - Load observability patterns
+- `/property-based-testing` - Load property-based testing guidance
+- `/test-driven-development` - Load TDD methodology guidance
+- `/systematic-debugging` - Load debugging methodology guidance
+- `/verification-before-completion` - Load completion verification guidance
 
 ### Progressive Disclosure
 Skills use progressive disclosure:
@@ -148,7 +205,8 @@ To test if skills are working:
    - "Create a new product feature"
    - "Generate tests for ProductService"
    - "Remove comments from this code"
-   - "Add logging to this use case"
+   - "Debug this test failure"
+   - "Implement the search feature"
 
 2. **Verify skill loads:**
    - Claude should reference the skill in its response
@@ -175,6 +233,7 @@ To add more skills:
 
 Future skills to consider:
 
+- **Observability Pattern Injector** - Structured logging, metrics, tracing patterns
 - **CDCT Test Generator** - Consumer-Driven Contract Testing patterns
 - **Dependency Injection Scaffolder** - Lagom container setup patterns
 - **API Route Generator** - Complete endpoint scaffolding
@@ -182,9 +241,7 @@ Future skills to consider:
 
 ## Resources
 
-- [Claude Code Skills Documentation](https://code.claude.com/docs/en/skills)
-- [Official Skills Repository](https://github.com/anthropics/skills)
-- [Awesome Agent Skills](https://github.com/VoltAgent/awesome-agent-skills)
+- [Claude Code Skills Documentation](https://docs.anthropic.com/en/docs/claude-code)
 - Project coding standards: `.claude/CLAUDE.md`
 
 ## Verification
@@ -194,4 +251,4 @@ Check all skills are present:
 ls -la .claude/skills/*/SKILL.md
 ```
 
-Expected output: 4 SKILL.md files (one for each Tier 1 skill)
+Expected output: 7 SKILL.md files (one for each Tier 1 skill)
