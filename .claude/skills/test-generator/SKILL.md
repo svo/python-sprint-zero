@@ -476,8 +476,11 @@ assert_that(str(excinfo.value)).contains("expected message")
 - Use `tox` to verify coverage
 
 ```bash
-# Run tests with coverage
+# Run all tests with coverage
 tox
+
+# Run specific tests during TDD iteration
+tox -- tests/specific_test.py
 
 # View coverage report
 coverage report
@@ -493,8 +496,8 @@ Before completing test generation, verify:
 - [ ] Appropriate use of mocks for dependencies
 - [ ] Tests are isolated and independent
 - [ ] All edge cases covered (happy path, errors, edge cases)
-- [ ] Tests pass: `pytest`
-- [ ] Coverage is 100%: `tox`
+- [ ] Tests verified with `tox` (NOT just `pytest` - must pass all quality gates)
+- [ ] Coverage is 100%: confirmed by `tox` output
 
 ## Common Mistakes to Avoid
 
@@ -507,6 +510,7 @@ Before completing test generation, verify:
 7. **Missing edge cases** - Test happy path, errors, and boundaries
 8. **No AAA structure** - Always use Arrange-Act-Assert
 9. **Testing multiple behaviors** - One test = one behavior
+10. **Using pytest for final verification** - Use `tox` to verify all quality gates pass
 
 ## References
 

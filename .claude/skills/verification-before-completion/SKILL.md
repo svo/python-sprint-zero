@@ -41,7 +41,7 @@ Skip any step = lying, not verifying
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Tests pass | `tox` output: 0 failures, all quality gates pass | Previous run, "should pass", `pytest` only |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
@@ -77,8 +77,9 @@ Skip any step = lying, not verifying
 
 **Tests:**
 ```
-✅ [Run test command] [See: 34/34 pass] "All tests pass"
+✅ [Run tox] [See: 34/34 pass, all quality gates pass] "All tests pass"
 ❌ "Should pass now" / "Looks correct"
+❌ [Run pytest] (bypasses 8 quality gates: flake8, black, bandit, semgrep, mypy, xenon, radon, pip-audit)
 ```
 
 **Regression tests (TDD Red-Green):**

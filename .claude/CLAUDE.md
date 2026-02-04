@@ -466,9 +466,30 @@ Before completing any work, code MUST pass:
 5. Confirm architectural unit tests pass
 
 ### Running Tests
+
+**IMPORTANT: Always use `tox` for final verification, NOT `pytest` directly**
+
+Running `pytest` directly bypasses 8 critical quality gates:
+- flake8 (linting/style)
+- black (code formatting)
+- bandit (security scanning)
+- semgrep (pattern/security analysis)
+- pip-audit (dependency vulnerabilities)
+- radon (cyclomatic complexity)
+- xenon (complexity enforcement)
+- mypy (type checking)
+
+This creates a false sense of completion. Tests may pass locally but fail in CI/CD.
+
 ```bash
-# Run all tests with coverage
+# ✅ CORRECT - Full verification with all quality gates
 tox
+
+# ✅ CORRECT - Quick iteration during TDD (runs specific test with all quality gates)
+tox -- tests/specific_test.py
+
+# ❌ WRONG - Bypasses quality gates
+pytest tests/specific_test.py
 
 # Run tests in watch mode
 tox -e watch
@@ -479,6 +500,8 @@ tox -e format
 # Run locally
 ./bin/run-local -c
 ```
+
+**Rule of thumb:** Always use `tox` (or `tox --` for specific tests), NEVER `pytest` directly.
 
 ## When Uncertain
 
@@ -507,7 +530,7 @@ tox -e format
 8. **Wrong test names** - Follow sentence pattern
 9. **Skipping CDCT tests** - Required for service interactions
 10. **Missing observability** - Add logging with correlation-id
-11. **Forgetting to run `tox`** - Always verify before completion
+11. **Using pytest instead of tox for final verification** - Bypasses 8 quality gates (flake8, black, bandit, semgrep, mypy, xenon, radon, pip-audit)
 12. **Creating new files unnecessarily** - Prefer editing existing
 
 ## Success Criteria
