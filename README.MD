@@ -82,6 +82,19 @@ For comprehensive architectural rules, coding standards, testing requirements, a
 - Docker containerization
 - Infrastructure as Code (Ansible, Terraform, Packer)
 
+## Claude Code Skills
+
+This project includes custom [Claude Code](https://docs.anthropic.com/en/docs/claude-code) skills to help with common development tasks. Use these slash commands in Claude Code:
+
+| Command | Purpose |
+|---------|---------|
+| `/hexagonal-architecture-scaffolder` | Scaffold a new feature across all architecture layers |
+| `/test-generator` | Generate tests following the one-assertion-per-test rule |
+| `/self-documenting-refactor` | Refactor code to eliminate comments |
+| `/property-based-testing` | Apply property-based testing patterns |
+
+These skills can also be triggered by natural language (e.g., "create a new feature", "generate tests for"). See [`.claude/skills/README.md`](.claude/skills/README.md) for full details.
+
 ## Contributing
 
 When contributing to this project:

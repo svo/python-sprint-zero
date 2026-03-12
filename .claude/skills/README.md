@@ -148,23 +148,30 @@ python .claude/skills/self-documenting-refactor/scripts/find_comments.py src/
 
 ## How Claude Code Uses Skills
 
-### Automatic Invocation
-Claude Code automatically loads and applies skills when trigger phrases are detected in user requests. For example:
-- User: "Create a new user feature" → Loads Hexagonal Architecture Scaffolder
-- User: "Generate tests for the UserService" → Loads Test Generator
-- User: "This code has comments, make it clearer" → Loads Self-Documenting Refactorer
-- User: "I need to debug this test failure" → Loads Systematic Debugging
-- User: "Implement the login feature" → Loads Test-Driven Development
+### Proactive Skills (Triggered by Claude's Behaviour)
+These skills activate automatically based on what Claude is doing, without the user needing to ask:
 
-### Manual Invocation
-You can also explicitly invoke skills:
-- `/hexagonal-architecture-scaffolder` - Load architecture scaffolding guidance
-- `/test-generator` - Load test generation guidance
-- `/self-documenting-refactor` - Load code refactoring guidance
-- `/property-based-testing` - Load property-based testing guidance
-- `/test-driven-development` - Load TDD methodology guidance
-- `/systematic-debugging` - Load debugging methodology guidance
-- `/verification-before-completion` - Load completion verification guidance
+- **systematic-debugging** — Claude enters this when it encounters a bug, test failure, or unexpected behaviour
+- **test-driven-development** — Claude follows this when implementing any feature or bugfix, writing tests before production code
+- **verification-before-completion** — Claude runs this before claiming work is complete, ensuring evidence before assertions
+
+### Reactive Skills (Triggered by User Requests)
+These skills activate when the user asks for something specific:
+
+- **hexagonal-architecture-scaffolder** — "Create a new feature", "scaffold a feature", "add a new domain entity", "create a new API endpoint"
+- **test-generator** — "Generate tests", "create tests for", "write test cases", "add test coverage"
+- **self-documenting-refactor** — "Remove comments", "make code self-documenting", "refactor to eliminate comments"
+- **property-based-testing** — "Property-based testing", "roundtrip test", "serialization test", "hypothesis test"
+
+### Slash Command Invocation
+Any skill can be explicitly invoked as a slash command:
+- `/hexagonal-architecture-scaffolder` - Scaffold a new feature across all architecture layers
+- `/test-generator` - Generate tests with one-assertion-per-test rule
+- `/self-documenting-refactor` - Refactor code to eliminate comments
+- `/property-based-testing` - Apply property-based testing patterns
+- `/test-driven-development` - Follow TDD red-green-refactor cycle
+- `/systematic-debugging` - Apply systematic debugging methodology
+- `/verification-before-completion` - Verify work before claiming completion
 
 ### Progressive Disclosure
 Skills use progressive disclosure:
