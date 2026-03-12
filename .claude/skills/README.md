@@ -146,6 +146,22 @@ python .claude/skills/self-documenting-refactor/scripts/find_comments.py src/
 
 ---
 
+### 8. Sequential Thinking
+**Directory:** `sequential-thinking/`
+**Trigger phrases:** "think through", "break down", "analyze step by step", "reason about", "sequential thinking"
+
+**Purpose:** A structured, reflective problem-solving process that breaks complex problems into numbered thought steps with revision, branching, hypothesis generation, and verification.
+
+**Key features:**
+- Numbered thought steps with scope estimation
+- Explicit revision markers when earlier thoughts were wrong
+- Branching for exploring alternative approaches
+- Hypothesis generation and verification cycles
+- Anti-pattern detection for shallow reasoning
+- Integration points with other skills (debugging, scaffolding, TDD)
+
+---
+
 ## How Claude Code Uses Skills
 
 ### Proactive Skills (Triggered by Claude's Behaviour)
@@ -154,6 +170,7 @@ These skills activate automatically based on what Claude is doing, without the u
 - **systematic-debugging** — Claude enters this when it encounters a bug, test failure, or unexpected behaviour
 - **test-driven-development** — Claude follows this when implementing any feature or bugfix, writing tests before production code
 - **verification-before-completion** — Claude runs this before claiming work is complete, ensuring evidence before assertions
+- **sequential-thinking** — Claude uses this when breaking down complex problems, planning, or making architecture decisions with trade-offs
 
 ### Reactive Skills (Triggered by User Requests)
 These skills activate when the user asks for something specific:
@@ -172,6 +189,7 @@ Any skill can be explicitly invoked as a slash command:
 - `/test-driven-development` - Follow TDD red-green-refactor cycle
 - `/systematic-debugging` - Apply systematic debugging methodology
 - `/verification-before-completion` - Verify work before claiming completion
+- `/sequential-thinking` - Break down complex problems into sequential reasoning steps
 
 ### Progressive Disclosure
 Skills use progressive disclosure:
@@ -258,4 +276,4 @@ Check all skills are present:
 ls -la .claude/skills/*/SKILL.md
 ```
 
-Expected output: 7 SKILL.md files (one for each Tier 1 skill)
+Expected output: 8 SKILL.md files (one for each Tier 1 skill)

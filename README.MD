@@ -92,6 +92,7 @@ This project includes custom [Claude Code](https://docs.anthropic.com/en/docs/cl
 | `/test-generator` | Generate tests following the one-assertion-per-test rule |
 | `/self-documenting-refactor` | Refactor code to eliminate comments |
 | `/property-based-testing` | Apply property-based testing patterns |
+| `/sequential-thinking` | Break down complex problems into sequential reasoning steps |
 
 These skills can also be triggered by natural language (e.g., "create a new feature", "generate tests for"). See [`.claude/skills/README.md`](.claude/skills/README.md) for full details.
 
