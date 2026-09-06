@@ -1,5 +1,5 @@
 import uuid
-from typing import Dict, Optional, Any
+from typing import Dict, Optional
 
 from python_sprint_zero.domain.model.coconut import Coconut
 
@@ -8,7 +8,7 @@ class SharedStorage:
     _instance: Optional["SharedStorage"] = None
     coconuts: Dict[uuid.UUID, Coconut] = {}
 
-    def __new__(cls) -> Any:
+    def __new__(cls) -> "SharedStorage":
         if cls._instance is None:
             cls._instance = super(SharedStorage, cls).__new__(cls)
         return cls._instance
