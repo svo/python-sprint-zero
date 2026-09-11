@@ -162,6 +162,34 @@ python .claude/skills/self-documenting-refactor/scripts/find_comments.py src/
 
 ---
 
+### 9. Specify
+**Directory:** `specify/`
+**Invocation:** `/specify <feature-description>` (slash command only; not auto-triggered)
+
+**Purpose:** Spec-driven development entry point. Produces `.specs/<feature-name>/SPEC.md` with user stories, acceptance criteria, hexagonal layer impact, API and CLI contracts, Lagom wiring, and observability requirements, all expressed against this project's actual package layout.
+
+**Key features:**
+- Derives a kebab-case `<feature-name>` used by `/plan`
+- Maps impact onto `src/python_sprint_zero/{domain,application,infrastructure,interface,shared}`
+- Encodes enforced rules (CQRS repository ABCs, DTOs never importing `domain.model`, Pydantic responses only)
+- Records HTTP Basic authentication requirements per endpoint
+
+---
+
+### 10. Plan
+**Directory:** `plan/`
+**Invocation:** `/plan <spec-name>` (slash command only; not auto-triggered)
+
+**Purpose:** Turns `.specs/<spec-name>/SPEC.md` into `.specs/<spec-name>/PLAN.md`: an inside-out, per-layer task list where every task pairs a source module with its mirrored test module and starts with a failing test.
+
+**Key features:**
+- Follows the `coconut` slice patterns (`execute()` use cases, controller factory, `from_domain_model()` DTOs)
+- Names the Lagom registrations for `get_container()` in `interface/api/main.py`
+- Calls out the tox gates each task must pass (xenon grade A, 100% coverage, random test order)
+- Validates that every acceptance criterion maps to a task
+
+---
+
 ## How Claude Code Uses Skills
 
 ### Proactive Skills (Triggered by Claude's Behaviour)
@@ -180,6 +208,12 @@ These skills activate when the user asks for something specific:
 - **self-documenting-refactor** — "Remove comments", "make code self-documenting", "refactor to eliminate comments"
 - **property-based-testing** — "Property-based testing", "roundtrip test", "serialization test", "hypothesis test"
 
+### Slash-Command-Only Skills
+These skills set `disable-model-invocation: true` and only run when the user invokes them:
+
+- **specify** — `/specify <feature-description>` writes `.specs/<feature-name>/SPEC.md`
+- **plan** — `/plan <spec-name>` writes `.specs/<spec-name>/PLAN.md`
+
 ### Slash Command Invocation
 Any skill can be explicitly invoked as a slash command:
 - `/hexagonal-architecture-scaffolder` - Scaffold a new feature across all architecture layers
@@ -190,6 +224,8 @@ Any skill can be explicitly invoked as a slash command:
 - `/systematic-debugging` - Apply systematic debugging methodology
 - `/verification-before-completion` - Verify work before claiming completion
 - `/sequential-thinking` - Break down complex problems into sequential reasoning steps
+- `/specify <feature-description>` - Write a feature specification before any code
+- `/plan <spec-name>` - Turn a specification into a per-layer TDD task list
 
 ### Progressive Disclosure
 Skills use progressive disclosure:
@@ -276,4 +312,4 @@ Check all skills are present:
 ls -la .claude/skills/*/SKILL.md
 ```
 
-Expected output: 8 SKILL.md files (one for each Tier 1 skill)
+Expected output: one SKILL.md per directory listed above

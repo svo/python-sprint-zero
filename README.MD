@@ -93,6 +93,8 @@ This project includes custom [Claude Code](https://docs.anthropic.com/en/docs/cl
 | `/self-documenting-refactor` | Refactor code to eliminate comments |
 | `/property-based-testing` | Apply property-based testing patterns |
 | `/sequential-thinking` | Break down complex problems into sequential reasoning steps |
+| `/specify <feature-description>` | Write a feature specification to `.specs/<feature-name>/SPEC.md` |
+| `/plan <spec-name>` | Turn a specification into a per-layer TDD implementation plan |
 
 These skills can also be triggered by natural language (e.g., "create a new feature", "generate tests for"). See [`.claude/skills/README.md`](.claude/skills/README.md) for full details.
 
